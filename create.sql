@@ -1,4 +1,4 @@
-drop schema cccat16 cascade;
+-- drop schema cccat16 cascade;
 
 create schema cccat16;
 
