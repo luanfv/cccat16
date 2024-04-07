@@ -6,8 +6,8 @@ axios.defaults.validateStatus = function () {
 }
 const connection = pgp()('postgres://postgres:123456@localhost:5432/app');
 const API_URL = 'http://localhost:3000/signup';
-const SELECT_MEMBER_FOR_ACCOUNT_ID_SCRIPT = 'select * from cccat16.account where account_id = $1';
-const DELETE_MEMBER_FOR_ACCOUNT_ID_SCRIPT = 'delete from cccat16.account where account_id = $1';
+const FIND_USER_FOR_ACCOUNT_ID_SCRIPT = 'select * from cccat16.account where account_id = $1';
+const DELETE_USER_FOR_ACCOUNT_ID_SCRIPT = 'delete from cccat16.account where account_id = $1';
 
 describe('POST /signup integration tests', () => {
 	afterAll(async () => {
@@ -22,7 +22,7 @@ describe('POST /signup integration tests', () => {
 			isPassenger: true
 		};
 		const output = await axios.post(API_URL, input);
-		const [memberFromDatabase] = await connection.query(SELECT_MEMBER_FOR_ACCOUNT_ID_SCRIPT, [output.data.accountId]);
+		const [memberFromDatabase] = await connection.query(FIND_USER_FOR_ACCOUNT_ID_SCRIPT, [output.data.accountId]);
 		const result = {
 			name: memberFromDatabase.name,
 			email: memberFromDatabase.email,
@@ -30,7 +30,7 @@ describe('POST /signup integration tests', () => {
 			isPassenger: memberFromDatabase.is_passenger,
 		};
 		expect(result).toEqual(input);
-		await connection.query(DELETE_MEMBER_FOR_ACCOUNT_ID_SCRIPT, [output.data.accountId]);
+		await connection.query(DELETE_USER_FOR_ACCOUNT_ID_SCRIPT, [output.data.accountId]);
 	});
 	
 	it('SHOULD create new driver', async function () {
@@ -42,7 +42,7 @@ describe('POST /signup integration tests', () => {
 			carPlate: 'ABC1234',
 		};
 		const output = await axios.post(API_URL, input);
-		const [memberFromDatabase] = await connection.query(SELECT_MEMBER_FOR_ACCOUNT_ID_SCRIPT, [output.data.accountId]);
+		const [memberFromDatabase] = await connection.query(FIND_USER_FOR_ACCOUNT_ID_SCRIPT, [output.data.accountId]);
 		const result = {
 			name: memberFromDatabase.name,
 			email: memberFromDatabase.email,
@@ -51,7 +51,7 @@ describe('POST /signup integration tests', () => {
 			carPlate: memberFromDatabase.car_plate,
 		};
 		expect(result).toEqual(input);
-		await connection.query(DELETE_MEMBER_FOR_ACCOUNT_ID_SCRIPT, [output.data.accountId]);
+		await connection.query(DELETE_USER_FOR_ACCOUNT_ID_SCRIPT, [output.data.accountId]);
 	});
 
 	describe('WHEN receive email already exists', () => {
@@ -71,7 +71,7 @@ describe('POST /signup integration tests', () => {
 		});
 
 		afterAll(async () => {
-			await connection.query(DELETE_MEMBER_FOR_ACCOUNT_ID_SCRIPT, [firstOutput.data.accountId]);
+			await connection.query(DELETE_USER_FOR_ACCOUNT_ID_SCRIPT, [firstOutput.data.accountId]);
 		})
 
 		it('SHOULD return -4', () => {
