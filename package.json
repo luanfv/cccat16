@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start:dev": "docker-compose up -d && npx ts-node src/driver/api.ts --watchAll",
+    "start:dev": "npx ts-node src/driver/api.ts --watchAll",
     "test": "jest"
   },
   "dependencies": {
