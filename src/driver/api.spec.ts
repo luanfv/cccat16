@@ -1,11 +1,8 @@
-import axios, { AxiosResponse } from 'axios';
 import pgp from 'pg-promise';
+import request from 'supertest';
+import { app } from './api';
 
-axios.defaults.validateStatus = function () {
-	return true;
-}
 const connection = pgp()({host: 'localhost', database: 'app', user: 'postgres', password: '123456' });
-const API_URL = 'http://localhost:3000/signup';
 const FIND_USER_FOR_ACCOUNT_ID_SCRIPT = 'select * from cccat16.account where account_id = $1';
 const DELETE_USER_FOR_ACCOUNT_ID_SCRIPT = 'delete from cccat16.account where account_id = $1';
 
@@ -21,18 +18,20 @@ describe('POST /signup integration tests', () => {
 			cpf: '87748248800',
 			isPassenger: true
 		};
-		let output: AxiosResponse<any, any>;
+		let output: request.Response;
 
 		beforeAll(async () => {
-			output = await axios.post(API_URL, input);
+			output = await request(app)
+				.post('/signup')
+				.send(input);
 		});
 
 		afterAll(async () => {
-			await connection.query(DELETE_USER_FOR_ACCOUNT_ID_SCRIPT, [output.data.accountId]);
+			await connection.query(DELETE_USER_FOR_ACCOUNT_ID_SCRIPT, [output.body.accountId]);
 		});
 
 		it('SHOULD create new member', async () => {
-			const [memberFromDatabase] = await connection.query(FIND_USER_FOR_ACCOUNT_ID_SCRIPT, [output.data.accountId]);
+			const [memberFromDatabase] = await connection.query(FIND_USER_FOR_ACCOUNT_ID_SCRIPT, [output.body.accountId]);
 			const result = {
 				name: memberFromDatabase.name,
 				email: memberFromDatabase.email,
@@ -43,12 +42,12 @@ describe('POST /signup integration tests', () => {
 		});
 
 		it('SHOULD return accountId from new member', async () => {
-			expect(output.data.accountId).toEqual(expect.any(String));
+			expect(output.body.accountId).toEqual(expect.any(String));
 		});
 	});
 
 	describe('WHEN unavailable to create new member', () => {
-		let output: AxiosResponse<any, any>;
+		let output: request.Response;
 
 		beforeAll(async () => {
 			const input = {
@@ -58,11 +57,13 @@ describe('POST /signup integration tests', () => {
 				isDriver: true,
 				carPlate: 'ABC1234',
 			};
-			output = await axios.post(API_URL, input);
+			output = await request(app)
+				.post('/signup')
+				.send(input);
 		});
 
 		it('SHOULD return message', () => {
-			expect(output.data).toEqual({ message: 'CPF informado inválido' });
+			expect(output.body).toEqual({ message: 'CPF informado inválido' });
 		});
 
 		it('SHOULD return status code 422', () => {

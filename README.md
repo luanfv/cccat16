@@ -12,8 +12,20 @@ Para executar o projeto na maquina é necessário ter os seguintes itens instala
 $ npm i
 
 # Executar o banco de dados pelo Docker Compose
-$ npx docker-compose up -d
+$ docker-compose up -d
 
-# Executa o projeto local/ambiente de desenvolvimento
+# Executar o projeto local/ambiente de desenvolvimento
 $ npm start:dev
+```
+
+## Execução de testes automatizados
+```
+# Instalar a dependências necessário para execução do projeto
+$ npm i
+
+# Executar o banco de dados pelo Docker Compose
+$ docker-compose up -d
+
+# Executar os testes automatizados em ambiente local
+$ npm test
 ```

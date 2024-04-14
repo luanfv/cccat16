@@ -55,7 +55,6 @@ export class SignUpService {
     
     async execute(props: SignUpServiceDto): Promise<string> {
         await this.validateRules(props);
-        console.log('>>> CHEGUEI AQUI:')
         const accountId = await this.createUser(props);
         return accountId;
     }
