@@ -2,7 +2,7 @@ POST http://localhost:3000/signup
 content-type: application/json
 
 {
-    "email": "luan@gmail.com",
+    "email": "luan2@gmail.com",
     "name": "luan vieira",
     "cpf": "87748248800",
     "isDriver": true,

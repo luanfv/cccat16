@@ -4,7 +4,7 @@ import pgp from 'pg-promise';
 axios.defaults.validateStatus = function () {
 	return true;
 }
-const connection = pgp()('postgres://postgres:123456@localhost:5432/app');
+const connection = pgp()({host: 'localhost', database: 'app', user: 'postgres', password: '123456' });
 const API_URL = 'http://localhost:3000/signup';
 const FIND_USER_FOR_ACCOUNT_ID_SCRIPT = 'select * from cccat16.account where account_id = $1';
 const DELETE_USER_FOR_ACCOUNT_ID_SCRIPT = 'delete from cccat16.account where account_id = $1';
@@ -74,8 +74,8 @@ describe('POST /signup integration tests', () => {
 			await connection.query(DELETE_USER_FOR_ACCOUNT_ID_SCRIPT, [firstOutput.data.accountId]);
 		})
 
-		it('SHOULD return -4', () => {
-			expect(secondOutput.data).toEqual(-4);
+		it('SHOULD return "Usuário já cadastrado"', () => {
+			expect(secondOutput.data).toEqual({ message: 'Usuário já cadastrado' });
 		});
 
 		it('SHOULD return status code 422', () => {
@@ -97,8 +97,8 @@ describe('POST /signup integration tests', () => {
 			output = await axios.post(API_URL, input);
 		});
 
-		it('SHOULD return -3', () => {
-			expect(output.data).toEqual(-3);
+		it('SHOULD return "Nome precisa ser completo"', () => {
+			expect(output.data).toEqual({ message: 'Nome precisa ser completo'});
 		});
 
 		it('SHOULD return status code 422', () => {
@@ -120,8 +120,8 @@ describe('POST /signup integration tests', () => {
 			output = await axios.post(API_URL, input);
 		});
 
-		it('SHOULD return -2', () => {
-			expect(output.data).toEqual(-2);
+		it('SHOULD return "E-mail informado é inválido"', () => {
+			expect(output.data).toEqual({ message: 'E-mail informado é inválido' });
 		});
 
 		it('SHOULD return status code 422', () => {
@@ -143,8 +143,8 @@ describe('POST /signup integration tests', () => {
 			output = await axios.post(API_URL, input);
 		});
 
-		it('SHOULD return -1', () => {
-			expect(output.data).toEqual(-1);
+		it('SHOULD return "CPF informado inválido"', () => {
+			expect(output.data).toEqual({ message: 'CPF informado inválido' });
 		});
 
 		it('SHOULD return status code 422', () => {
@@ -166,8 +166,8 @@ describe('POST /signup integration tests', () => {
 			output = await axios.post(API_URL, input);
 		});
 
-		it('SHOULD return -5', () => {
-			expect(output.data).toEqual(-5);
+		it('SHOULD return "Placa do carro inválida"', () => {
+			expect(output.data).toEqual({ message: 'Placa do carro inválida' });
 		});
 
 		it('SHOULD return status code 422', () => {
