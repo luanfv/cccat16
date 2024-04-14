@@ -1,7 +1,7 @@
 import { AccountDAO } from '../resource/account-dao';
 import { Request, Response } from 'express';
 import { SignUpService } from '../application/sign-up.service';
-import { AccountDAODatabase } from '../resource/account-dao-database';
+import { AccountDatabaseDAO } from '../resource/account-database.dao';
 
 class SignUpPostResponseDto {
     constructor(readonly accountId: string) {}
@@ -12,7 +12,7 @@ export class SignUpController {
     private readonly signUpService: SignUpService;
 
     constructor() {
-        this.accountDAO = new AccountDAODatabase();
+        this.accountDAO = new AccountDatabaseDAO();
         this.signUpService = new SignUpService(this.accountDAO);
     }
 

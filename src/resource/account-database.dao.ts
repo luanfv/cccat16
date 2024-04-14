@@ -2,7 +2,7 @@ import pgPromise from 'pg-promise';
 import { AccountDAO } from './account-dao';
 
 // Driven/Resource Adapter
-export class AccountDAODatabase implements AccountDAO {
+export class AccountDatabaseDAO implements AccountDAO {
 	constructor(private readonly connection = pgPromise()('postgres://postgres:123456@localhost:5432/app')) {}
 
 	async getAccountByEmail (email: string) {
@@ -20,9 +20,5 @@ export class AccountDAODatabase implements AccountDAO {
 			'insert into cccat16.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver) values ($1, $2, $3, $4, $5, $6, $7)', 
 			[account.accountId, account.name, account.email, account.cpf, account.carPlate, !!account.isPassenger, !!account.isDriver],
 		);
-	}
-
-	async endConnection() {
-		await this.connection.$pool.end();
 	}
 }

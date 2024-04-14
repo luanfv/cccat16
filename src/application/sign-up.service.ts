@@ -10,7 +10,7 @@ enum ERROR_MESSAGE {
     USER_ALREADY_EXISTS = 'Usuário já cadastrado',
 };
 
-type SignUpServiceDto = {
+export type SignUpServiceDto = {
     name: string;
     email: string;
     cpf: string;
