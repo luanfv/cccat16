@@ -1,4 +1,4 @@
-import { AccountDAO } from './account-dao';
+import { AccountDAO } from './account.dao';
 
 // Driven/Resource Adapter
 export class AccountMemoryDAO implements AccountDAO {

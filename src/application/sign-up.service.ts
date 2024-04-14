@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import { validateCpf } from './validate-cpf';
-import { AccountDAO } from '../resource/account-dao';
+import { AccountDAO } from '../resource/account.dao';
 
 enum ERROR_MESSAGE {
     INVALID_CPF = 'CPF informado inválido',
@@ -27,8 +27,8 @@ export class SignUpService {
         if (!props.email.match(/^(.+)@(.+)$/)) throw new Error(ERROR_MESSAGE.INVALID_EMAIL);
         if (!props.name.match(/[a-zA-Z] [a-zA-Z]+/)) throw new Error(ERROR_MESSAGE.INVALID_FULL_NAME);
         if (props.isDriver && props.carPlate && !props.carPlate.match(/[A-Z]{3}[0-9]{4}/)) throw new Error(ERROR_MESSAGE.INVALID_CAR_PLATE);
-        const acc = await this.accountDAO.getAccountByEmail(props.email);
-        if (acc) throw new Error(ERROR_MESSAGE.USER_ALREADY_EXISTS);
+        const account = await this.accountDAO.getAccountByEmail(props.email);
+        if (!!account) throw new Error(ERROR_MESSAGE.USER_ALREADY_EXISTS);
     }
 
     private async createUser(props: SignUpServiceDto): Promise<string> {
@@ -55,6 +55,7 @@ export class SignUpService {
     
     async execute(props: SignUpServiceDto): Promise<string> {
         await this.validateRules(props);
+        console.log('>>> CHEGUEI AQUI:')
         const accountId = await this.createUser(props);
         return accountId;
     }
