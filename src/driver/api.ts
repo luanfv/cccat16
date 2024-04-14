@@ -1,5 +1,5 @@
 import express from 'express';
-import { SignUpController } from './driver/sign-up.controller';
+import { SignUpController } from './controllers/sign-up.controller';
 
 const app = express();
 app.use(express.json());

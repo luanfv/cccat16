@@ -1,7 +1,7 @@
-import { AccountDAO } from '../resource/account-dao';
+import { AccountDAO } from '../../resource/account-dao';
 import { Request, Response } from 'express';
-import { SignUpService } from '../application/sign-up.service';
-import { AccountDatabaseDAO } from '../resource/account-database.dao';
+import { SignUpService } from '../../application/sign-up.service';
+import { AccountDatabaseDAO } from '../../resource/account-database.dao';
 
 class SignUpPostResponseDto {
     constructor(readonly accountId: string) {}

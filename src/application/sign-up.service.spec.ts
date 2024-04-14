@@ -1,7 +1,7 @@
 import { AccountMemoryDAO } from '../resource/account-memory.dao';
 import { SignUpService, SignUpServiceDto } from './sign-up.service';
 
-describe('SignUpService integration tests', () => {
+describe('SignUpService unit tests', () => {
     const accountDAO = new AccountMemoryDAO();
     const signUpService = new SignUpService(accountDAO);
 
