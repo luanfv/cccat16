@@ -1,3 +1,5 @@
-import { app } from './driver/api';
+import { AppServer } from './driver/app';
 
-app.listen(3000, () => console.log('Application is running at port: 3000'));
+const app = new AppServer();
+
+app.listen();

@@ -1,12 +1,14 @@
 import pgp from 'pg-promise';
 import request from 'supertest';
-import { app } from './api';
+import { AppServer } from './app';
 
 const connection = pgp()({host: 'localhost', database: 'app', user: 'postgres', password: '123456' });
 const FIND_USER_FOR_ACCOUNT_ID_SCRIPT = 'select * from cccat16.account where account_id = $1';
 const DELETE_USER_FOR_ACCOUNT_ID_SCRIPT = 'delete from cccat16.account where account_id = $1';
 
 describe('POST /signup integration tests', () => {
+	const app = new AppServer().app;
+
 	afterAll(async () => {
 		await connection.$pool.end();
 	});
