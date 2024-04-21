@@ -1,19 +1,16 @@
-import { AccountDAO } from '../../resource/account.dao';
 import { Request, Response } from 'express';
-import { SignUpService } from '../../application/sign-up.service';
-import { AccountDatabaseDAO } from '../../resource/account-database.dao';
+import { SignUpService } from '../application/sign-up.service';
+import { AccountRepository } from '../infra/repository/account.repository';
 
 class SignUpPostResponseDto {
     constructor(readonly accountId: string) {}
 }
 
 export class SignUpController {
-    private readonly accountDAO: AccountDAO;
     private readonly signUpService: SignUpService;
 
-    constructor() {
-        this.accountDAO = new AccountDatabaseDAO();
-        this.signUpService = new SignUpService(this.accountDAO);
+    constructor(private readonly accountRepository: AccountRepository) {
+        this.signUpService = new SignUpService(this.accountRepository);
     }
 
     async post(req: Request, res: Response) {

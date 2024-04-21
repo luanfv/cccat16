@@ -1,7 +1,6 @@
-import { AccountDAO } from './account.dao';
+import { AccountRepository } from './account.repository';
 
-// Driven/Resource Adapter
-export class AccountMemoryDAO implements AccountDAO {
+export class AccountMemoryRepository implements AccountRepository {
 	accounts: any[];
 
 	constructor () {

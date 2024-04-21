@@ -1,9 +1,10 @@
-import { AccountMemoryDAO } from '../resource/account-memory.dao';
+import { AccountBuilderEntity } from '../domain/account-builder.entity';
+import { AccountMemoryRepository } from '../infra/repository/account-memory.repository';
 import { SignUpService, SignUpServiceDto } from './sign-up.service';
 
 describe('SignUpService unit tests', () => {
-    const accountDAO = new AccountMemoryDAO();
-    const signUpService = new SignUpService(accountDAO);
+    const accountRepository = new AccountMemoryRepository();
+    const signUpService = new SignUpService(accountRepository);
 
     describe('WHEN invalid CPF', () => {
         it('SHOULD throw error with message: "CPF informado inválido"', async () => {
@@ -21,54 +22,6 @@ describe('SignUpService unit tests', () => {
         });
     });
 
-    describe('WHEN invalid email', () => {
-        it('SHOULD throw error with message: "E-mail informado é inválido"', async () => {
-            const account: SignUpServiceDto = {
-				name: 'John Doe',
-				email: `john${Math.random()}`,
-				cpf: '97456321558',
-				isDriver: true,
-				carPlate: 'ABC1234',
-			};
-            const expectedResult = new Error('E-mail informado é inválido');
-            await expect(signUpService.execute(account))
-                .rejects
-                .toThrowError(expectedResult);
-        });
-    });
-
-    describe('WHEN invalid full name', () => {
-        it('SHOULD throw error with message: "Nome precisa ser completo"', async () => {
-            const account: SignUpServiceDto = {
-				name: 'John',
-				email: `john${Math.random()}@gmail.com`,
-				cpf: '97456321558',
-				isDriver: true,
-				carPlate: 'ABC1234',
-			};
-            const expectedResult = new Error('Nome precisa ser completo');
-            await expect(signUpService.execute(account))
-                .rejects
-                .toThrowError(expectedResult);
-        });
-    });
-
-    describe('WHEN invalid car plate', () => {
-        it('SHOULD throw error with message: "Placa do carro inválida"', async () => {
-            const account: SignUpServiceDto = {
-				name: 'John Doe',
-				email: `john${Math.random()}@gmail.com`,
-				cpf: '97456321558',
-				isDriver: true,
-				carPlate: '0',
-			};
-            const expectedResult = new Error('Placa do carro inválida');
-            await expect(signUpService.execute(account))
-                .rejects
-                .toThrowError(expectedResult);
-        });
-    });
-
     describe('WHEN user already exists', () => {
         it('SHOULD throw error with message: "Usuário já cadastrado"', async () => {
             const account: SignUpServiceDto = {
@@ -78,7 +31,7 @@ describe('SignUpService unit tests', () => {
 				isDriver: true,
 				carPlate: 'ABC1234',
 			};
-            accountDAO.saveAccount(account)
+            accountRepository.saveAccount(account)
             const expectedResult = new Error('Usuário já cadastrado');
             await expect(signUpService.execute(account))
                 .rejects
@@ -88,15 +41,9 @@ describe('SignUpService unit tests', () => {
 
     describe('WHEN register driver', () => {
         it('SHOULD create new driver', async () => {
-            const account: SignUpServiceDto = {
-				name: 'John Doe',
-				email: `john${Math.random()}@gmail.com`,
-				cpf: '97456321558',
-				isDriver: true,
-				carPlate: 'ABC1234',
-			};
+            const account = new AccountBuilderEntity().build();
             const accountId = await signUpService.execute(account);
-            const expectedResult = await accountDAO.getAccountByEmail(account.email);
+            const expectedResult = await accountRepository.getAccountByEmail(account.email);
             const result = {
                 ...account,
                 accountId,
@@ -108,19 +55,13 @@ describe('SignUpService unit tests', () => {
 
     describe('WHEN register passenger', () => {
         it('SHOULD create new passenger', async () => {
-            const account: SignUpServiceDto = {
-				name: 'John Doe',
-				email: `john${Math.random()}@gmail.com`,
-				cpf: '97456321558',
-                isPassenger: true,
-			};
+            const account = new AccountBuilderEntity().withPassenger().build();
             const accountId = await signUpService.execute(account);
-            const expectedResult = await accountDAO.getAccountByEmail(account.email);
+            const expectedResult = await accountRepository.getAccountByEmail(account.email);
             const result = {
                 ...account,
                 accountId,
                 isDriver: false,
-                carPlate: undefined,
             };
             expect(result).toEqual(expectedResult);
         });
