@@ -1,7 +1,7 @@
 import pgPromise from 'pg-promise';
-import { DatabaseConnection } from './database.connection';
+import { ConnectionDatabase } from './connection-database';
 
-export class PostgresAdapter implements DatabaseConnection {
+export class PostgresAdapter implements ConnectionDatabase {
     private readonly connection;
 
     constructor() {

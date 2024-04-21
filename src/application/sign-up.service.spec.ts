@@ -66,4 +66,6 @@ describe('SignUpService unit tests', () => {
             expect(result).toEqual(expectedResult);
         });
     });
+
+    it.todo('SHOULD return account id');
 });

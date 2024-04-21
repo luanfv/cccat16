@@ -2,13 +2,15 @@ import pgPromise from 'pg-promise';
 import { AccountBuilderEntity } from '../../domain/account-builder.entity';
 import { AccountDatabaseRepository } from './account-database.repository';
 import { AccountEntity } from '../../domain/account.entity';
+import { PostgresAdapter } from '../database/postgres.adapter';
 
 const connection = pgPromise()({host: 'localhost', database: 'app', user: 'postgres', password: '123456' });
 const FIND_USER_FOR_ACCOUNT_ID_SCRIPT = 'select * from cccat16.account where account_id = $1';
 const DELETE_USER_FOR_ACCOUNT_ID_SCRIPT = 'delete from cccat16.account where account_id = $1';
 
 describe('AccountDatabaseRepository integration tests', () => {
-    const accountDatabaseRepository = new AccountDatabaseRepository();
+    const postgresAdapter = new PostgresAdapter();
+    const accountDatabaseRepository = new AccountDatabaseRepository(postgresAdapter);
     const account = new AccountBuilderEntity().build();
 
     beforeAll(async () => {
@@ -21,11 +23,11 @@ describe('AccountDatabaseRepository integration tests', () => {
     afterAll(async () => {
         await connection.query(DELETE_USER_FOR_ACCOUNT_ID_SCRIPT, [account.accountId]);
         await connection.$pool.end();
-        await accountDatabaseRepository.close();
+        await postgresAdapter.close();
     });
 
     describe('getAccountByEmail', () => {
-        it('SHOULD return the member from database', async () => {
+        it('SHOULD return the account from database', async () => {
             await expect(accountDatabaseRepository.getAccountByEmail(account.email))
                 .resolves
                 .toEqual(account);
@@ -34,7 +36,7 @@ describe('AccountDatabaseRepository integration tests', () => {
     });
 
     describe('getAccountById', () => {
-        it('SHOULD return the member from database', async () => {
+        it('SHOULD return the account from database', async () => {
             await expect(accountDatabaseRepository.getAccountById(account.accountId))
                 .resolves
                 .toEqual(account);
@@ -43,7 +45,7 @@ describe('AccountDatabaseRepository integration tests', () => {
     });
 
     describe('saveAccount', () => {
-        it('SHOULD save the member from database', async () => {
+        it('SHOULD save the account in database', async () => {
             const newAccount = new AccountBuilderEntity().build();
             await accountDatabaseRepository.saveAccount(newAccount);
             const [memberFromDatabase] = await connection.query(FIND_USER_FOR_ACCOUNT_ID_SCRIPT, [newAccount.accountId]);

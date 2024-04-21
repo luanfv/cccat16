@@ -2,12 +2,8 @@ import { AccountEntity } from '../../domain/account.entity';
 import { PostgresAdapter } from '../database/postgres.adapter';
 import { AccountRepository } from './account.repository';
 
-export class AccountDatabaseRepository implements AccountRepository {
-    private readonly database: PostgresAdapter;
-    
-    constructor() {
-        this.database = new PostgresAdapter();
-    }
+export class AccountDatabaseRepository implements AccountRepository {    
+    constructor(private readonly database: PostgresAdapter) {}
 
     async getAccountByEmail(email: string): Promise<AccountEntity | undefined> {
         const [accountFromDatabase] = await this.database.query('select * from cccat16.account where email = $1', [email]);
@@ -50,9 +46,5 @@ export class AccountDatabaseRepository implements AccountRepository {
                 !!account.isDriver,
             ],
         );
-    }
-
-    async close() {
-        await this.database.close();
     }
 }

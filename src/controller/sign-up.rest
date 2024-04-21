@@ -6,5 +6,6 @@ content-type: application/json
     "name": "luan vieira",
     "cpf": "87748248800",
     "isDriver": true,
+    // "isPassenger": true,
     "carPlate": "ABC1234"
 }

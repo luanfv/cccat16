@@ -1,6 +1,4 @@
-import pgPromise from 'pg-promise';
-
-export interface DatabaseConnection {
+export interface ConnectionDatabase {
     query(query: string, params: any[]): Promise<any>;
     close(): Promise<void>;
 }

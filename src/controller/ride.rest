@@ -1,0 +1,10 @@
+POST http://localhost:3000/ride
+content-type: application/json
+
+{
+    "passengerId": "3ac9b400-e241-4a5e-a85c-71586cf92acf",
+    "fromLat": 2,
+    "fromLong": 3,
+    "toLat": 1,
+    "toLong": 1
+}
