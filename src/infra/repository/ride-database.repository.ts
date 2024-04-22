@@ -9,8 +9,9 @@ export class RideDatabaseRepository implements RideRepository {
 		await this.database.query('insert into cccat16.ride (ride_id, passenger_id, from_lat, from_long, to_lat, to_long, status, date) values ($1, $2, $3, $4, $5, $6, $7, $8)', [ride.rideId, ride.passengerId, ride.fromLat, ride.fromLong, ride.toLat, ride.toLong, ride.status, ride.date]);
 	}
 
-	async getRideById(rideId: string): Promise<RideEntity> {
+	async getRideById(rideId: string): Promise<RideEntity | undefined> {
 		const [rideData] = await this.database.query('select * from cccat16.ride where ride_id = $1', [rideId]);
+		if (!rideData) return undefined;
 		return RideEntity.restore(rideData.ride_id, rideData.passenger_id, parseFloat(rideData.from_lat), parseFloat(rideData.from_long), parseFloat(rideData.to_lat), parseFloat(rideData.to_long), rideData.status, rideData.date);
 	}
 

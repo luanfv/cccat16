@@ -19,6 +19,11 @@ export class RideBuilderEntity {
         return this;
     }
 
+    withPassenger(passengerId: string) {
+        this._props = { ...this._props, passengerId: passengerId };
+        return this;
+    }
+
     build(): RideEntity {
         return this._props;
     }

@@ -11,7 +11,10 @@ export type RequestRideServiceDto = {
 };
 
 export class RequestRideService {
-	constructor (readonly accountRepository: AccountRepository, readonly rideRepository: RideRepository) {}
+	constructor (
+		private readonly accountRepository: AccountRepository,
+		private readonly rideRepository: RideRepository,
+	) {}
 	
 	async execute (input: RequestRideServiceDto): Promise<string> {
 		const account = await this.accountRepository.getAccountById(input.passengerId);

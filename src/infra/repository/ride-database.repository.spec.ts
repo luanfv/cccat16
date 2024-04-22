@@ -16,7 +16,7 @@ describe('RideDatabaseRepository integration tests', () => {
 			await rideDatabaseRepository.saveRide(ride);
 			const [rideFromDatabase] = await postgresAdapter.query('select * from cccat16.ride where ride_id = $1', [ride.rideId]);
 			expect(rideFromDatabase.ride_id).toEqual(ride.rideId);
-			await postgresAdapter.query('delete from cccat16.ride where ride_id = $1', [rideFromDatabase.ride_id]);
+			await postgresAdapter.query('delete from cccat16.ride where ride_id = $1', [ride.rideId]);
 		});
 	});
 
@@ -37,7 +37,7 @@ describe('RideDatabaseRepository integration tests', () => {
 			);
 			const rideFromDatabase = await rideDatabaseRepository.getRideById(ride.rideId);
 			expect(rideFromDatabase).toEqual(ride);
-			await postgresAdapter.query('delete from cccat16.ride where ride_id = $1', [rideFromDatabase.rideId]);
+			await postgresAdapter.query('delete from cccat16.ride where ride_id = $1', [ride.rideId]);
 		});
 	});
 

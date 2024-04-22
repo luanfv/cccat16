@@ -1,7 +1,7 @@
 import { AccountRepository } from './account.repository';
 
 export class AccountMemoryRepository implements AccountRepository {
-	accounts: any[];
+	private accounts: any[];
 
 	constructor () {
 		this.accounts = [];
