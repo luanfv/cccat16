@@ -1,19 +1,17 @@
-import crypto from 'node:crypto';
 import { AccountEntity } from './account.entity'
 
 export class AccountBuilderEntity {
     private _props: AccountEntity;
 
     constructor() {
-        this._props = {
-            name: 'John Doe',
-            email: `john${Math.random()}@gmail.com`,
-            cpf: '97456321558',
-            isDriver: true,
-            carPlate: 'ABC1234',
-            isPassenger: false,
-            accountId: crypto.randomUUID(),
-        }
+        this._props = AccountEntity.create(
+            'John Doe',
+            `john${Math.random()}@gmail.com`,
+            '97456321558',
+            'ABC1234',
+            false,
+            true,
+        );
     }
 
     withInvalidCpf(): AccountBuilderEntity {
