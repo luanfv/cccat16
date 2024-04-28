@@ -24,7 +24,7 @@ export class AccountBuilderEntity {
             this._props.getName(),
             this._props.getEmail(),
             this._props.getCpf(),
-            this._props.getCarPlate(),
+            undefined,
             true,
             false,
         );

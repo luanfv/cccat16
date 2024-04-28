@@ -13,9 +13,7 @@ export class AccountEntity {
 		readonly isPassenger: boolean,
 		readonly isDriver: boolean,
 		private readonly carPlate?: CarPlateVO,
-	) {
-		if (!!this.isDriver && !this.carPlate) throw new Error('Motorista precisa ter uma placa de carro');
-	}
+	) {}
 
 	static create(name: string, email: string, cpf: string, carPlate: string | undefined, isPassenger: boolean, isDriver: boolean): AccountEntity {
 		const accountId = crypto.randomUUID();

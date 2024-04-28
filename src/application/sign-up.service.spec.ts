@@ -62,7 +62,7 @@ describe('SignUpService unit tests', () => {
                 account.name,
                 account.email,
                 account.cpf,
-                account?.carPlate,
+                account.carPlate,
                 true,
                 false,
             );
