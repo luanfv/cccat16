@@ -1,4 +1,4 @@
-import { RideEntity } from '../domain/ride.entity';
+import { RideEntity } from '../domain/entity/ride.entity';
 import { RideRepository } from '../infra/repository/ride.repository';
 import { AccountRepository } from '../infra/repository/account.repository';
 

@@ -1,4 +1,4 @@
-import { RideEntity } from '../../domain/ride.entity';
+import { RideEntity } from '../../domain/entity/ride.entity';
 import { RideRepository } from './ride.repository';
 
 export class RideMemoryRepository implements RideRepository {

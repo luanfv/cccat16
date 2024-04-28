@@ -1,4 +1,4 @@
-import { RideBuilderEntity } from '../../domain/ride-builder.entity';
+import { RideBuilderEntity } from '../../domain/entity/ride-builder.entity';
 import { PostgresAdapter } from '../database/postgres.adapter';
 import { RideDatabaseRepository } from './ride-database.repository';
 

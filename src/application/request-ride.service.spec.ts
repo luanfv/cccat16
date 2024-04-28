@@ -1,8 +1,8 @@
 import { AccountMemoryRepository } from '../infra/repository/account-memory.repository';
 import { RequestRideService } from './request-ride.service';
 import { RideMemoryRepository } from '../infra/repository/ride-memory.repository';
-import { RideBuilderEntity } from '../domain/ride-builder.entity';
-import { AccountBuilderEntity } from '../domain/account-builder.entity';
+import { RideBuilderEntity } from '../domain/entity/ride-builder.entity';
+import { AccountBuilderEntity } from '../domain/entity/account-builder.entity';
 
 describe('RequestRideService unit tests', () => {
 	const accountRepository = new AccountMemoryRepository();

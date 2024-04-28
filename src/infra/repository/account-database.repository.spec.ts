@@ -1,6 +1,6 @@
-import { AccountBuilderEntity } from '../../domain/account-builder.entity';
+import { AccountBuilderEntity } from '../../domain/entity/account-builder.entity';
 import { AccountDatabaseRepository } from './account-database.repository';
-import { AccountEntity } from '../../domain/account.entity';
+import { AccountEntity } from '../../domain/entity/account.entity';
 import { PostgresAdapter } from '../database/postgres.adapter';
 
 const FIND_USER_FOR_ACCOUNT_ID_SCRIPT = 'select * from cccat16.account where account_id = $1';
@@ -14,7 +14,7 @@ describe('AccountDatabaseRepository integration tests', () => {
     beforeAll(async () => {
         await postgresAdapter.query(
 			'insert into cccat16.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver) values ($1, $2, $3, $4, $5, $6, $7)', 
-			[account.accountId, account.name, account.email, account.cpf, account.carPlate, !!account.isPassenger, !!account.isDriver],
+			[account.accountId, account.getName(), account.getEmail(), account.getCpf(), account.getCarPlate(), !!account.isPassenger, !!account.isDriver],
 		);
     });
 
@@ -25,7 +25,7 @@ describe('AccountDatabaseRepository integration tests', () => {
 
     describe('getAccountByEmail', () => {
         it('SHOULD return the account from database', async () => {
-            await expect(accountDatabaseRepository.getAccountByEmail(account.email))
+            await expect(accountDatabaseRepository.getAccountByEmail(account.getEmail()))
                 .resolves
                 .toEqual(account);
         });

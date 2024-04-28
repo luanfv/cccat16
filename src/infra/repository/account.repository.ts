@@ -1,4 +1,4 @@
-import { AccountEntity } from '../../domain/account.entity';
+import { AccountEntity } from '../../domain/entity/account.entity';
 
 export interface AccountRepository {
 	getAccountByEmail (email: string): Promise<AccountEntity | undefined>;

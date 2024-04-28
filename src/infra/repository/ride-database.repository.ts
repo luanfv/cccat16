@@ -1,4 +1,4 @@
-import { RideEntity } from '../../domain/ride.entity';
+import { RideEntity } from '../../domain/entity/ride.entity';
 import { PostgresAdapter } from '../database/postgres.adapter';
 import { RideRepository } from './ride.repository';
 

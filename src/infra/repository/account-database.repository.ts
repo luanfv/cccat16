@@ -1,4 +1,4 @@
-import { AccountEntity } from '../../domain/account.entity';
+import { AccountEntity } from '../../domain/entity/account.entity';
 import { PostgresAdapter } from '../database/postgres.adapter';
 import { AccountRepository } from './account.repository';
 
@@ -38,10 +38,10 @@ export class AccountDatabaseRepository implements AccountRepository {
             'insert into cccat16.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver) values ($1, $2, $3, $4, $5, $6, $7)',
             [
                 account.accountId,
-                account.name,
-                account.email,
-                account.cpf,
-                account.carPlate,
+                account.getName(),
+                account.getEmail(),
+                account.getCpf(),
+                account.getCarPlate(),
                 !!account.isPassenger,
                 !!account.isDriver,
             ],

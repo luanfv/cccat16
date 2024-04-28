@@ -1,4 +1,4 @@
-import { RideEntity } from '../../domain/ride.entity';
+import { RideEntity } from '../../domain/entity/ride.entity';
 
 export interface RideRepository {
 	saveRide (ride: RideEntity): Promise<void>;

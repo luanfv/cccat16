@@ -1,5 +1,5 @@
 import { AccountRepository } from './../infra/repository/account.repository';
-import { AccountEntity } from '../domain/account.entity';
+import { AccountEntity } from '../domain/entity/account.entity';
 
 export type SignUpServiceDto = {
     name: string;
@@ -20,7 +20,7 @@ export class SignUpService {
             props.name,
             props.email,
             props.cpf,
-            props.carPlate ?? '',
+            props.carPlate,
             !!props.isPassenger,
             !!props.isDriver,
         );

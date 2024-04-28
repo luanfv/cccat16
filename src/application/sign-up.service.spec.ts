@@ -1,4 +1,5 @@
-import { AccountBuilderEntity } from '../domain/account-builder.entity';
+import { AccountBuilderEntity } from '../domain/entity/account-builder.entity';
+import { AccountEntity } from '../domain/entity/account.entity';
 import { AccountMemoryRepository } from '../infra/repository/account-memory.repository';
 import { SignUpService, SignUpServiceDto } from './sign-up.service';
 
@@ -24,16 +25,10 @@ describe('SignUpService unit tests', () => {
 
     describe('WHEN user already exists', () => {
         it('SHOULD throw error with message: "Usuário já cadastrado"', async () => {
-            const account: SignUpServiceDto = {
-				name: 'John Doe',
-				email: `john${Math.random()}@gmail.com`,
-				cpf: '97456321558',
-				isDriver: true,
-				carPlate: 'ABC1234',
-			};
+            const account = new AccountBuilderEntity().build();
             accountRepository.saveAccount(account)
             const expectedResult = new Error('Usuário já cadastrado');
-            await expect(signUpService.execute(account))
+            await expect(signUpService.execute(account.toObject()))
                 .rejects
                 .toThrowError(expectedResult);
         });
@@ -41,28 +36,36 @@ describe('SignUpService unit tests', () => {
 
     describe('WHEN register driver', () => {
         it('SHOULD create new driver', async () => {
-            const account = new AccountBuilderEntity().build();
+            const account = new AccountBuilderEntity().build().toObject();
             const accountId = await signUpService.execute(account);
             const expectedResult = await accountRepository.getAccountByEmail(account.email);
-            const result = {
-                ...account,
+            const result = AccountEntity.restore(
                 accountId,
-                isPassenger: false,
-            };
+                account.name,
+                account.email,
+                account.cpf,
+                account?.carPlate,
+                false,
+                true,
+            );
             expect(result).toEqual(expectedResult);
         });
     });
 
     describe('WHEN register passenger', () => {
         it('SHOULD create new passenger', async () => {
-            const account = new AccountBuilderEntity().withPassenger().build();
+            const account = new AccountBuilderEntity().withPassenger().build().toObject();
             const accountId = await signUpService.execute(account);
             const expectedResult = await accountRepository.getAccountByEmail(account.email);
-            const result = {
-                ...account,
+            const result = AccountEntity.restore(
                 accountId,
-                isDriver: false,
-            };
+                account.name,
+                account.email,
+                account.cpf,
+                account?.carPlate,
+                true,
+                false,
+            );
             expect(result).toEqual(expectedResult);
         });
     });
