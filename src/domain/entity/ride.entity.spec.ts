@@ -5,22 +5,23 @@ describe('RideEntity unit tests', () => {
 	describe('create', () => {
 		it('SHOULD return new ride with status = requested', () => {
 			const ride = new RideBuilderEntity().build();
-			const expectedResult: RideEntity = {
-				date: expect.any(Date),
-				fromLat: ride.fromLat,
-				fromLong: ride.fromLong,
-				passengerId: ride.passengerId,
-				rideId: expect.any(String),
-				status: 'requested',
-				toLat: ride.toLat,
-				toLong: ride.toLong,
-			};
+			const expectedResult = RideEntity.restore(
+				expect.any(String),
+				ride.passengerId,
+				expect.any(String),
+				ride.getFromLat(),
+				ride.getFromLong(),
+				ride.getToLat(),
+				ride.getToLong(),
+				ride.getStatus(),
+				expect.any(Date),
+			);
 			const result = RideEntity.create(
 				ride.passengerId,
-				ride.fromLat,
-				ride.fromLong,
-				ride.toLat,
-				ride.toLong,
+				ride.getFromLat(),
+				ride.getFromLong(),
+				ride.getToLat(),
+				ride.getToLong(),
 			);
 			expect(result).toEqual(expectedResult);
 		});
@@ -32,11 +33,12 @@ describe('RideEntity unit tests', () => {
 			const result = RideEntity.restore(
 				ride.rideId,
 				ride.passengerId,
-				ride.fromLat,
-				ride.fromLong,
-				ride.toLat,
-				ride.toLong,
-				ride.status,
+				ride.driverId,
+				ride.getFromLat(),
+				ride.getFromLong(),
+				ride.getToLat(),
+				ride.getToLong(),
+				ride.getStatus(),
 				ride.date,
 			);
 			expect(result).toEqual(ride);
